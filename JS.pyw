@@ -7,7 +7,7 @@ filee = open("Logged.txt", "r")
 user = filee.read()
 filee.close()
 
-if "guest3392" in user:
+if "guest3392" == user:
     fileee = open("Logged.txt", "w")
     fileee.write("")
     fileee.close()
