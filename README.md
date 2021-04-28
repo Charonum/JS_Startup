@@ -3,4 +3,4 @@ right here </br>
 | </br>
 | </br>
 v </br>
-INSTALLER: tps://github.com/Charonum/JS_Setup
+INSTALLER: https://github.com/Charonum/JS_Setup
