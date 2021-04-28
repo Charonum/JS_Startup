@@ -73,9 +73,9 @@ def login():
         password1 = password_verify.get()
         username_entry1.delete(0, END)
         password_entry1.delete(0, END)
-
+        username1 = username1 + ".cacc"
         list_of_files = os.listdir()
-        if (username1 + ".cacc") in list_of_files:
+        if username1 in list_of_files:
             file1 = open(username1, "r")
             verify = file1.read().splitlines()
             if password1 in verify:
