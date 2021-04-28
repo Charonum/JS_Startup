@@ -8,9 +8,11 @@ user = filee.read()
 filee.close()
 
 if "guest3392" == user:
-    fileee = open("Logged.txt", "w")
-    fileee.write("")
-    fileee.close()
+    raw = open("Logged.txt", "r+")
+    contents = raw.read().split("\n")
+    raw.seek(0)
+    raw.truncate()
+    raw.close()
 
 API_KEY = "tdckrMO6mGTD"
 PROJECT_TOKEN = "t7mCATFxt4_e"
