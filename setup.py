@@ -13,6 +13,8 @@ for item in os.listdir(path):
         pass
     elif "setup.py" == item:
         pass
+    elif "Logged.txt" == item:
+        pass
     else:
         item = os.path.join(path, item)
         os.remove(item)
@@ -27,6 +29,8 @@ for file in responsecontent.split("\n"):
     file = file.replace("'", "")
     file = file.replace(r"\n", "")
     if file == "":
+        pass
+    elif "Logged.txt" == file:
         pass
     else:
         url = f'https://raw.githubusercontent.com/Charonum/JSCode/main/code/windows/{file}'
@@ -46,11 +50,21 @@ user_file.close()
 print("Done!")
 print("Update Complete")
 
-if user == "":
+if user == "guest3392":
     print("User not logged in. Redirecting...")
+    os.remove("Logged.txt")
+    new_logged = open("Logged.txt", "w")
+    new_logged.close()
     os.system("JSMain.pyw")
+    quit()
+elif user == "":
+    print("User not logged in. Redirecting...")
+    os.remove("Logged.txt")
+    new_logged = open("Logged.txt", "w")
+    new_logged.close()
+    os.system("JSMain.pyw")
+    quit()
 else:
     print(f"Redirecting {user} to menu.")
     os.system("ServerSelect.pyw")
-
-quit()
+    quit()
