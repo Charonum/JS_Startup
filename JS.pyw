@@ -76,7 +76,6 @@ def start():
         quit()
     else:
         import os
-        os.chdir("Stiff_Files")
         os.system("setup.py")
 
 

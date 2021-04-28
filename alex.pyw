@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import messagebox
 import random
 
-
 class GUI:
     client_socket = None
     last_received_message = None
