@@ -111,15 +111,13 @@ def char():
 def script():
     import os
     def new_script():
-        screen.destroy()
         os.system("script.pyw")
-        quit()
 
     def script_settings(script, required_script):
         def run_script():
             screen.destroy()
             root2.destroy()
-            root.destroy()
+            roof.destroy()
             os.system(required_script)
             quit()
         def remove():
@@ -133,10 +131,10 @@ def script():
         Button(root2, text="Uninstall", command=lambda: remove()).pack()
         root2.mainloop()
 
-    root = Tk()
-    root.title("Scripts")
-    root.iconbitmap("CC logo.ico")
-    root.geometry("250x300")
+    roof = Tk()
+    roof.title("Scripts")
+    roof.iconbitmap("CC logo.ico")
+    roof.geometry("250x300")
     for file in os.listdir():
         if ".csa" in file:
             if ".pyw" in file:
@@ -144,8 +142,9 @@ def script():
                 file3 = file
                 file2 = file2.replace(".pyw", "")
                 file2 = file2.replace(".csa", "")
-                Button(root, text=file2, command=lambda: script_settings(file2, file3)).pack()
-    root.mainloop()
+                Button(roof, text=file2, command=lambda: script_settings(file2, file3)).pack()
+    Button(roof, text="New Script", command=lambda: new_script()).pack()
+    roof.mainloop()
 
 
 screen = Tk()

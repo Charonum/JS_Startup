@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-import random
+import os
+os.system("TASKKILL /F /IM cmd.exe")
 
 class GUI:
     client_socket = None

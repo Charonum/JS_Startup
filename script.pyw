@@ -1,7 +1,8 @@
-import os
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.filedialog import askopenfile
+import os
+os.system("TASKKILL /F /IM cmd.exe")
 
 root = Tk()
 root.geometry('235x200')
