@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 
+
 class GUI:
     client_socket = None
     last_received_message = None
@@ -21,7 +22,6 @@ class GUI:
         self.root.resizable(0, 0)
         self.display_chat_box()
         self.display_chat_entry_box()
-
 
     def display_chat_box(self):
         frame = Frame()
@@ -113,6 +113,7 @@ f = open("Logged.txt", "r")
 user = f.read()
 f.close()
 username = user
+username = username.replace(".cacc", "")
 root2 = Tk()
 gui = GUI(root2)
 root2.protocol("WM_DELETE_WINDOW", gui.on_close_window)

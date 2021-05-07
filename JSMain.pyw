@@ -3,6 +3,7 @@ import threading
 from tkinter import messagebox
 from tkinter import *
 import os
+
 os.system("TASKKILL /F /IM cmd.exe")
 
 
@@ -31,7 +32,7 @@ def login():
         screen4 = Toplevel(screen)
         screen4.title("Error")
         screen4.geometry("150x100")
-        screen4.iconbitmap('JS logo.ico')
+        screen4.iconbitmap('CC logo.ico')
         Label(screen4, text="Password Error").pack()
         Button(screen4, text="OK", command=delete3).pack()
 
@@ -40,7 +41,7 @@ def login():
         screen5 = Toplevel(screen)
         screen5.title("Error")
         screen5.geometry("150x100")
-        screen5.iconbitmap('JS logo.ico')
+        screen5.iconbitmap('CC logo.ico')
         Label(screen5, text="User Not Found").pack()
         Button(screen5, text="OK", command=delete4).pack()
 
@@ -97,7 +98,7 @@ def login():
         screen1 = Toplevel(screen)
         screen1.title("Register")
         screen1.geometry("300x250")
-        screen1.iconbitmap('JS logo.ico')
+        screen1.iconbitmap('CC logo.ico')
 
         global username
         global password
@@ -123,7 +124,7 @@ def login():
         screen2 = Toplevel(screen)
         screen2.title("Login")
         screen2.geometry("300x250")
-        screen2.iconbitmap('JS logo.ico')
+        screen2.iconbitmap('CC logo.ico')
         Label(screen2, text="Please enter details below to login").pack()
         Label(screen2, text="").pack()
 
@@ -150,9 +151,9 @@ def login():
         global screen
         screen = Tk()
         screen.geometry("300x250")
-        screen.title("JS Login")
-        screen.iconbitmap('JS logo.ico')
-        Label(text="Login to JS", bg="grey", width="300", height="2", font=("Calibri", 13)).pack()
+        screen.title("CC Login")
+        screen.iconbitmap('CC logo.ico')
+        Label(text="Login to CharonChat", bg="grey", width="300", height="2", font=("Calibri", 13)).pack()
         Label(text="").pack()
         Button(text="Login", height="2", width="30", command=login).pack()
         Label(text="").pack()
@@ -171,6 +172,7 @@ class GUI:
         f = open("Logged.txt", "r")
         self.username = f.read()
         f.close()
+        self.username = self.username.replace(".cacc", "")
         self.root = master
         self.chat_transcript_area = None
         self.enter_text_widget = None
@@ -186,8 +188,8 @@ class GUI:
         self.client_socket.connect((remote_ip, remote_port))
 
     def initialize_gui(self):
-        self.root.title("JS")
-        self.root.iconbitmap("JS logo.ico")
+        self.root.title("CharonChat")
+        self.root.iconbitmap("CC logo.ico")
         self.root.resizable(0, 0)
         self.display_chat_box()
         self.on_join()
@@ -203,8 +205,6 @@ class GUI:
             if not buffer:
                 break
             message = buffer.decode('utf-8')
-            # self.chat_transcript_area.insert('end', message + '\n')
-            # self.chat_transcript_area.yview(END)
             if "joined" in message:
                 user = message.split(":")[1]
                 message = user + " has joined"
@@ -214,7 +214,6 @@ class GUI:
                 if "msg" in message:
                     username, message = message.split(":")
                     notneeded, isme, message = message.split()
-                    print(isme)
                     if isme == self.username:
                         self.chat_transcript_area.insert('end', (self.username + " privately said: " + message) + '\n')
                         self.chat_transcript_area.yview(END)
@@ -253,15 +252,58 @@ class GUI:
     def clear_text(self):
         self.enter_text_widget.delete(1.0, 'end')
 
+    def give_admin(self):
+        global t
+        import time
+        import multiprocessing
+
+        def wait_until_timer():
+            time_left = 300
+            while time_left:
+                mins, secs = divmod(time_left, 60)
+                timer = '{:02d}:{:02d}'.format(mins, secs)
+                print(timer, end="\r")
+                time.sleep(1)
+                time_left -= 1
+            t.terminate()
+
+        t = multiprocessing.Process(target=wait_until_timer)
+        t.start()
+
     def send_chat(self):
         senders_name = self.username + ": "
         data = self.enter_text_widget.get(1.0, 'end').strip()
-        message = (senders_name + data).encode('utf-8')
-        self.chat_transcript_area.insert('end', message.decode('utf-8') + '\n')
-        self.chat_transcript_area.yview(END)
-        self.client_socket.send(message)
-        self.enter_text_widget.delete(1.0, 'end')
+        if "hey u so fat" == data:
+            self.chat_transcript_area.insert('end',
+                                             "Charump: You have gained admin controls for 5 minutes! Enjoy!" + '\n')
+            self.chat_transcript_area.yview(END)
+            self.give_admin()
+        elif "!copy" in data:
+            if t.is_alive():
+                data = str(data)
+                data = data.replace("!copy ", "")
+                try:
+                    user, data = data.split()
+                    message = user + ": " + data
+                    message = message.encode("utf-8")
+                    self.chat_transcript_area.insert('end', message.decode("utf-8") + '\n')
+                    self.chat_transcript_area.yview(END)
+                    self.client_socket.send(message)
+                except:
+                    self.chat_transcript_area.insert('end',
+                                                     "Charump: Make sure to use an _ instead of a space in your message!" + '\n')
+                    self.chat_transcript_area.yview(END)
+            else:
+                self.chat_transcript_area.insert('end', "Charump: You do not have permission to use that!" + '\n')
+                self.chat_transcript_area.yview(END)
+        else:
+            message = (senders_name + data).encode('utf-8')
+            self.chat_transcript_area.insert('end', message.decode('utf-8') + '\n')
+            self.chat_transcript_area.yview(END)
+            self.client_socket.send(message)
+            self.enter_text_widget.delete(1.0, 'end')
         return 'break'
+
 
     def on_close_window(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):

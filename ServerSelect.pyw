@@ -1,5 +1,6 @@
 from tkinter import *
 import os
+
 os.system("TASKKILL /F /IM cmd.exe")
 
 
@@ -20,8 +21,8 @@ def logout():
 def guireport():
     global error
     root = Tk()
-    root.title("JS")
-    root.iconbitmap("JS logo.ico")
+    root.title("CharonChat")
+    root.iconbitmap("CC logo.ico")
     root.geometry("250x300")
     Label(root, text="What is the bug?").pack()
     error = Entry(root, width=20)
@@ -70,12 +71,13 @@ def settingsf():
             f6 = open("Logged.txt", "w")
             f6.write(str(newuser))
             f6.close()
-            Label(root, text="Settings Saved Successfully! Restart\nthe program for this to take action", fg="green").pack()
+            Label(root, text="Settings Saved Successfully! Restart\nthe program for this to take action",
+                  fg="green").pack()
             newname.delete(0, END)
 
     root = Tk()
     root.title("Settings")
-    root.iconbitmap("JS logo.ico")
+    root.iconbitmap("CC logo.ico")
     root.geometry("250x300")
     Label(root, text=f"Logged in as: {user}", font=("Arial", 12, "bold")).pack()
     Label(root, text="").pack(anchor="w")
@@ -99,10 +101,57 @@ def alex():
     quit()
 
 
+def char():
+    import os
+    screen.destroy()
+    os.system("charump.pyw")
+    quit()
+
+
+def script():
+    import os
+    def new_script():
+        screen.destroy()
+        os.system("script.pyw")
+        quit()
+
+    def script_settings(script, required_script):
+        def run_script():
+            screen.destroy()
+            root2.destroy()
+            root.destroy()
+            os.system(required_script)
+            quit()
+        def remove():
+            os.remove(required_script)
+            Label(root2, text=f"{script} was removed.", foreground="green")
+        root2 = Tk()
+        root2.title(script)
+        root2.iconbitmap("CC logo.ico")
+        root2.geometry("250x300")
+        Button(root2, text="Run", command=lambda: run_script()).pack()
+        Button(root2, text="Uninstall", command=lambda: remove()).pack()
+        root2.mainloop()
+
+    root = Tk()
+    root.title("Scripts")
+    root.iconbitmap("CC logo.ico")
+    root.geometry("250x300")
+    for file in os.listdir():
+        if ".csa" in file:
+            if ".pyw" in file:
+                file2 = file
+                file3 = file
+                file2 = file2.replace(".pyw", "")
+                file2 = file2.replace(".csa", "")
+                Button(root, text=file2, command=lambda: script_settings(file2, file3)).pack()
+    root.mainloop()
+
+
 screen = Tk()
-screen.geometry("500x320")
-screen.title("JS")
-screen.iconbitmap('JS logo.ico')
+screen.geometry("595x370")
+screen.title("CharonChat")
+screen.iconbitmap('CC logo.ico')
 f = open("Logged.txt", "r")
 user = f.read()
 f.close()
@@ -114,6 +163,8 @@ vc = Button(screen, text="Join VC", height=1, command=voc).pack()
 chat = Button(screen, text="Report A Bug", height=1, command=guireport).pack()
 settings = Button(screen, text="Settings", height=1, command=settingsf).pack()
 alex = Button(screen, text="Chat With A.L.E.X.", height=1, command=alex).pack()
+charump = Button(screen, text="Chat With Charump", height=1, command=char).pack()
+script2 = Button(screen, text="Scripts", height=1, command=lambda: script()).pack()
 logout = Button(screen, text="Log Out", height=1, command=logout).pack()
 frame = Frame()
 Label(frame, text='Patch Notes:', font=("Serif", 12)).pack(side='top', anchor='w')
@@ -124,6 +175,6 @@ chat_transcript_area.bind('<KeyPress>', lambda e: 'break')
 chat_transcript_area.pack(side='left', padx=10)
 scrollbar.pack(side='right', fill='y')
 frame.pack(side='top')
-chat_transcript_area.insert('end', "easier install. no running any files yay\nv1.1.3")
+chat_transcript_area.insert('end', "script imports here cool\nv1.1.5")
 chat_transcript_area.yview(END)
 screen.mainloop()
