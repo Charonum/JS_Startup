@@ -15,6 +15,8 @@ for item in os.listdir(path):
         pass
     elif "Logged.txt" == item:
         pass
+    elif ".csa" in item:
+        pass
     else:
         item = os.path.join(path, item)
         os.remove(item)
