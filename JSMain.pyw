@@ -252,56 +252,14 @@ class GUI:
     def clear_text(self):
         self.enter_text_widget.delete(1.0, 'end')
 
-    def give_admin(self):
-        global t
-        import time
-        import multiprocessing
-
-        def wait_until_timer():
-            time_left = 300
-            while time_left:
-                mins, secs = divmod(time_left, 60)
-                timer = '{:02d}:{:02d}'.format(mins, secs)
-                print(timer, end="\r")
-                time.sleep(1)
-                time_left -= 1
-            t.terminate()
-
-        t = multiprocessing.Process(target=wait_until_timer)
-        t.start()
-
     def send_chat(self):
         senders_name = self.username + ": "
         data = self.enter_text_widget.get(1.0, 'end').strip()
-        if "hey u so fat" == data:
-            self.chat_transcript_area.insert('end',
-                                             "Charump: You have gained admin controls for 5 minutes! Enjoy!" + '\n')
-            self.chat_transcript_area.yview(END)
-            self.give_admin()
-        elif "!copy" in data:
-            if t.is_alive():
-                data = str(data)
-                data = data.replace("!copy ", "")
-                try:
-                    user, data = data.split()
-                    message = user + ": " + data
-                    message = message.encode("utf-8")
-                    self.chat_transcript_area.insert('end', message.decode("utf-8") + '\n')
-                    self.chat_transcript_area.yview(END)
-                    self.client_socket.send(message)
-                except:
-                    self.chat_transcript_area.insert('end',
-                                                     "Charump: Make sure to use an _ instead of a space in your message!" + '\n')
-                    self.chat_transcript_area.yview(END)
-            else:
-                self.chat_transcript_area.insert('end', "Charump: You do not have permission to use that!" + '\n')
-                self.chat_transcript_area.yview(END)
-        else:
-            message = (senders_name + data).encode('utf-8')
-            self.chat_transcript_area.insert('end', message.decode('utf-8') + '\n')
-            self.chat_transcript_area.yview(END)
-            self.client_socket.send(message)
-            self.enter_text_widget.delete(1.0, 'end')
+        message = (senders_name + data).encode('utf-8')
+        self.chat_transcript_area.insert('end', message.decode('utf-8') + '\n')
+        self.chat_transcript_area.yview(END)
+        self.client_socket.send(message)
+        self.enter_text_widget.delete(1.0, 'end')
         return 'break'
 
 
