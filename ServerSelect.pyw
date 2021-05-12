@@ -1,7 +1,63 @@
 from tkinter import *
 import os
+import multiprocessing
+import socket
 
 os.system("TASKKILL /F /IM cmd.exe")
+
+online_list = []
+offline_list = []
+try:
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    remote_ip = '50.113.72.248'
+    remote_port = 25565
+    client_socket.connect((remote_ip, remote_port))
+    online_list.append("tcm")
+    try:
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        remote_ip = '50.113.72.248'
+        remote_port = 50001
+        client_socket.connect((remote_ip, remote_port))
+        online_list.append("vcm")
+        try:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            remote_ip = '50.113.72.248'
+            remote_port = 55888
+            client_socket.connect((remote_ip, remote_port))
+            online_list.append("vcl")
+        except:
+            offline_list.append("vcl")
+    except:
+        offline_list.append("vcm")
+except:
+    offline_list.append("tcm")
+    try:
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        remote_ip = '50.113.72.248'
+        remote_port = 50001
+        client_socket.connect((remote_ip, remote_port))
+        online_list.append("vcm")
+        try:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            remote_ip = '50.113.72.248'
+            remote_port = 55888
+            client_socket.connect((remote_ip, remote_port))
+            online_list.append("vcl")
+        except:
+            offline_list.append("vcl")
+    except:
+        offline_list.append("vcm")
+        try:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            remote_ip = '50.113.72.248'
+            remote_port = 55888
+            client_socket.connect((remote_ip, remote_port))
+            online_list.append("vcl")
+        except:
+            offline_list.append("vcl")
+
+print(f"Online: {online_list}")
+print(f"Offline: {offline_list}")
 
 
 def runmain():
@@ -40,9 +96,9 @@ def guireport():
 
 def report():
     import smtplib
-    sender_address = "jonahprogrambot@gmail.com"  # Replace this with your Gmail address
-    receiver_address = "jonahjwalsh@gmail.com"  # Replace this with any valid email address
-    account_password = "skro7576"  # Replace this with your Gmail account password
+    sender_address = "jonahprogrambot@gmail.com"
+    receiver_address = "jonahjwalsh@gmail.com"
+    account_password = "skro7576"
     subject = "Bug Report"
     body = f"{user} reported a bug\n{error.get()}"
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
@@ -110,6 +166,7 @@ def char():
 
 def script():
     import os
+
     def new_script():
         os.system("script.pyw")
 
@@ -120,9 +177,11 @@ def script():
             roof.destroy()
             os.system(required_script)
             quit()
+
         def remove():
             os.remove(required_script)
             Label(root2, text=f"{script} was removed.", foreground="green")
+
         root2 = Tk()
         root2.title(script)
         root2.iconbitmap("CC logo.ico")
@@ -157,8 +216,50 @@ f.close()
 user = user.replace(".cacc", "")
 Label(text=f"Welcome, {user}", bg="grey", width="500", height="2", font=("Calibri", 13)).pack()
 Label(text="").pack()
-universal = Button(screen, text="Join Universal Chat", height=1, command=runmain).pack()
-vc = Button(screen, text="Join VC", height=1, command=voc).pack()
+if "tcm" in online_list:
+    universal = Button(screen, text="Join Text Chat", height=1, command=runmain).pack()
+else:
+    import smtplib
+
+    sender_address = "jonahprogrambot@gmail.com"
+    receiver_address = "jonahjwalsh@gmail.com"
+    account_password = "skro7576"
+    subject = "Bug Report"
+    body = f"Text chat is offline! Automated message from {user}"
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
+        smtp_server.login(sender_address, account_password)
+        message = f"Subject: {subject}\n\n{body}"
+        smtp_server.sendmail(sender_address, receiver_address, message)
+    universal = Button(screen, text="Join Text Chat: Offline!", height=1, state=DISABLED).pack()
+if "vcm" in online_list:
+    if "vcl" in online_list:
+        vc = Button(screen, text="Join VC", height=1, command=voc).pack()
+    else:
+        import smtplib
+
+        sender_address = "jonahprogrambot@gmail.com"
+        receiver_address = "jonahjwalsh@gmail.com"
+        account_password = "skro7576"
+        subject = "VC log offline"
+        body = f"VC server log is offline!\nAutomated message from {user}"
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
+            smtp_server.login(sender_address, account_password)
+            message = f"Subject: {subject}\n\n{body}"
+            smtp_server.sendmail(sender_address, receiver_address, message)
+        vc = Button(screen, text="Join VC: Offline!", height=1, state=DISABLED).pack()
+else:
+    import smtplib
+
+    sender_address = "jonahprogrambot@gmail.com"
+    receiver_address = "jonahjwalsh@gmail.com"
+    account_password = "skro7576"
+    subject = "Bug Report"
+    body = f"VC server main is offline!\nAutomated message from {user}"
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
+        smtp_server.login(sender_address, account_password)
+        message = f"Subject: {subject}\n\n{body}"
+        smtp_server.sendmail(sender_address, receiver_address, message)
+    vc = Button(screen, text="Join VC: Offline!", height=1, state=DISABLED).pack()
 chat = Button(screen, text="Report A Bug", height=1, command=guireport).pack()
 settings = Button(screen, text="Settings", height=1, command=settingsf).pack()
 alex = Button(screen, text="Chat With A.L.E.X.", height=1, command=alex).pack()
@@ -174,6 +275,6 @@ chat_transcript_area.bind('<KeyPress>', lambda e: 'break')
 chat_transcript_area.pack(side='left', padx=10)
 scrollbar.pack(side='right', fill='y')
 frame.pack(side='top')
-chat_transcript_area.insert('end', "fixes to vc and yes\nv1.1.6")
+chat_transcript_area.insert('end', "now you can see if chats are offline yes very cool\nv1.1.7")
 chat_transcript_area.yview(END)
 screen.mainloop()
