@@ -262,7 +262,6 @@ class GUI:
         self.enter_text_widget.delete(1.0, 'end')
         return 'break'
 
-
     def on_close_window(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             import os
