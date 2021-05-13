@@ -56,7 +56,7 @@ class GUI:
         self.chat_transcript_area.insert('end', message + '\n')
         self.chat_transcript_area.yview(END)
         if data == "Got any quests?":
-            self.chat_transcript_area.insert('end', 'Charump: Yeah! Say this to someone: "hey u so fat", you get admin for 5 min!' + '\n')
+            self.chat_transcript_area.insert('end', 'Charump: Sorry, no. Check back later.' + '\n')
             self.chat_transcript_area.yview(END)
         else:
             self.chat_transcript_area.insert('end', "A.L.E.X.: K" + '\n')
