@@ -1,10 +1,38 @@
 from tkinter import *
 import os
 import socket
+import requests
+
+ip = requests.get('http://ip.42.pl/raw').text
 
 os.system("TASKKILL /F /IM cmd.exe")
+
+
+def new_close():
+    quit()
+
+
+def uninstall():
+    for file in os.listdir():
+        os.remove(file)
+
+
 online_list = None
 offline_list = None
+if ip == "75.32.225.157":
+    pass
+elif ip == "66.27.125.154":
+    pass
+elif ip == "50.113.72.248":
+    pass
+else:
+    root = Tk()
+    root.title("Unsupported IP")
+    root.geometry("250x300")
+    Label(root, text=f"You have an unsupported IP. Your IP: {ip}\nYou can uninstall the program here:\n|\n|\nv").pack()
+    Button(root, text="Uninstall", command=uninstall).pack()
+    root.protocol("WM_DELETE_WINDOW", lambda: new_close())
+    root.mainloop()
 
 
 def refresh():
