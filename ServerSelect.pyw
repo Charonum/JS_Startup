@@ -52,14 +52,6 @@ def refresh():
             remote_port = 50001
             client_socket.connect((remote_ip, remote_port))
             online_list.append("vcm")
-            try:
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                remote_ip = '50.113.72.248'
-                remote_port = 55888
-                client_socket.connect((remote_ip, remote_port))
-                online_list.append("vcl")
-            except:
-                offline_list.append("vcl")
         except:
             offline_list.append("vcm")
     except:
@@ -70,24 +62,8 @@ def refresh():
             remote_port = 50001
             client_socket.connect((remote_ip, remote_port))
             online_list.append("vcm")
-            try:
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                remote_ip = '50.113.72.248'
-                remote_port = 55888
-                client_socket.connect((remote_ip, remote_port))
-                online_list.append("vcl")
-            except:
-                offline_list.append("vcl")
         except:
             offline_list.append("vcm")
-            try:
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                remote_ip = '50.113.72.248'
-                remote_port = 55888
-                client_socket.connect((remote_ip, remote_port))
-                online_list.append("vcl")
-            except:
-                offline_list.append("vcl")
 
 
 refresh()
@@ -111,22 +87,22 @@ def logout():
 
 def guireport():
     global error_
-    root = Tk()
-    root.title("CharonChat")
-    root.iconbitmap("CC logo.ico")
-    root.geometry("250x300")
-    Label(root, text="What is the bug?").pack()
-    error_ = Entry(root, width=20)
+    root6 = Tk()
+    root6.title("CharonChat")
+    root6.iconbitmap("CC logo.ico")
+    root6.geometry("250x300")
+    Label(root6, text="What is the bug?").pack()
+    error_ = Entry(root6, width=20)
     error_.pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Label(root, text="").pack()
-    Button(root, text="Report", command=report).pack()
-    root.mainloop()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Label(root6, text="").pack()
+    Button(root6, text="Report", command=report).pack()
+    root6.mainloop()
 
 
 def report():
@@ -154,7 +130,7 @@ def settingsf():
         try:
             f2 = open(str(newuser), "r")
             f2.close()
-            Label(root, text="User Already Exists!", fg="red").pack()
+            Label(root5, text="User Already Exists!", fg="red").pack()
             newname.delete(0, END)
         except:
             import os
@@ -162,27 +138,27 @@ def settingsf():
             f6 = open("Logged.txt", "w")
             f6.write(str(newuser))
             f6.close()
-            Label(root, text="Settings Saved Successfully! Restart\nthe program for this to take action",
+            Label(root5, text="Settings Saved Successfully! Restart\nthe program for this to take action",
                   fg="green").pack()
             newname.delete(0, END)
 
-    root = Tk()
-    root.title("Settings")
-    root.iconbitmap("CC logo.ico")
-    root.geometry("250x300")
-    Label(root, text=f"Logged in as: {user}", font=("Arial", 12, "bold")).pack()
-    Label(root, text="").pack(anchor="w")
-    Label(root, text="Change Name:").pack(anchor="w")
-    newname = Entry(root, width=20)
+    root5 = Tk()
+    root5.title("Settings")
+    root5.iconbitmap("CC logo.ico")
+    root5.geometry("250x300")
+    Label(root5, text=f"Logged in as: {user}", font=("Arial", 12, "bold")).pack()
+    Label(root5, text="").pack(anchor="w")
+    Label(root5, text="Change Name:").pack(anchor="w")
+    newname = Entry(root5, width=20)
     newname.pack(anchor="w")
-    errorw = Label(root, text="")
+    errorw = Label(root5, text="")
     errorw.pack(anchor="w")
-    Label(root, text="").pack(anchor="w")
-    Label(root, text="").pack(anchor="w")
-    Label(root, text="").pack(anchor="w")
-    Label(root, text="").pack(anchor="w")
-    Button(root, text="Save", command=save).pack()
-    root.mainloop()
+    Label(root5, text="").pack(anchor="w")
+    Label(root5, text="").pack(anchor="w")
+    Label(root5, text="").pack(anchor="w")
+    Label(root5, text="").pack(anchor="w")
+    Button(root5, text="Save", command=save).pack()
+    root5.mainloop()
 
 
 def alex():
@@ -200,80 +176,53 @@ def char():
 
 
 def status():
-    root = Tk()
-    root.title("CharonChat")
-    root.iconbitmap("CC logo.ico")
-    root.geometry("250x300")
+    root3 = Tk()
+    root3.title("CharonChat")
+    root3.iconbitmap("CC logo.ico")
+    root3.geometry("250x300")
 
     def refresh1(offline_number=0):
         if "tcm" in online_list:
             if "vcm" in online_list:
-                if "vcl" in online_list:
-                    statu = Label(root, text="All servers status: Online", fg="green",
-                                  font=("Arial", 12, "bold")).pack()
-                else:
-                    offline_number = offline_number + 1
-                    statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                Label(root3, text="All servers status: Online", fg="green",
+                      font=("Arial", 12, "bold")).pack()
             else:
-                offline_number = offline_number + 1
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root3, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root3, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
         else:
             offline_number = offline_number + 1
             if "vcm" in online_list:
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root3, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root3, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
             else:
                 offline_number = offline_number + 1
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root3, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root3, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
 
         if "tcm" in online_list:
-            tcm = Label(root, text="'tcm', identified as Text Chat status: Online", fg="green").pack()
+            Label(root3, text="'tcm', identified as TC status: Online", fg="green").pack()
         elif "tcm" in offline_list:
-            tcm = Label(root, text="'tcm', identified as Text Chat status: Offline", fg="red").pack()
+            Label(root3, text="'tcm', identified as TC status: Offline", fg="red").pack()
         else:
-            tcm = Label(root, text="'tcm', identified as Text Chat status: Unknown", fg="red").pack()
+            Label(root3, text="'tcm', identified as TC status: Unknown", fg="red").pack()
         if "vcm" in online_list:
-            vcm = Label(root, text="'vcm', identified as Main VC status: Online", fg="green").pack()
+            Label(root3, text="'vcm', identified as VC status: Online", fg="green").pack()
         elif "vcm" in offline_list:
-            vcm = Label(root, text="'vcm', identified as Main VC status: Offline", fg="red").pack()
+            Label(root3, text="'vcm', identified as VC status: Offline", fg="red").pack()
         else:
-            vcm = Label(root, text="'vcm', identified as Main VC status: Unknown", fg="red").pack()
-        if "vcl" in online_list:
-            vcl = Label(root, text="'tcm', identified as VC Log status: Online", fg="green").pack()
-        elif "vcl" in offline_list:
-            vcl = Label(root, text="'tcm', identified as VC Log status: Offline", fg="red").pack()
-        else:
-            vcl = Label(root, text="'tcm', identified as VC Log status: Unknown", fg="red").pack()
+            Label(root3, text="'vcm', identified as VC status: Unknown", fg="red").pack()
 
     def refresh2(offline_number=0):
         refresh()
@@ -283,77 +232,50 @@ def status():
         root2.geometry("250x300")
         if "tcm" in online_list:
             if "vcm" in online_list:
-                if "vcl" in online_list:
-                    statu = Label(root2, text="All servers status: Online", fg="green",
-                                  font=("Arial", 12, "bold")).pack()
-                else:
-                    offline_number = offline_number + 1
-                    statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                Label(root2, text="All servers status: Online", fg="green",
+                      font=("Arial", 12, "bold")).pack()
             else:
-                offline_number = offline_number + 1
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root2, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root2, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
         else:
             offline_number = offline_number + 1
             if "vcm" in online_list:
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root2, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root2, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
             else:
                 offline_number = offline_number + 1
-                if "vcl" in online_list:
-                    if offline_number == 0:
-                        statu = Label(root2, text="All servers status: Online", fg="green",
-                                      font=("Arial", 12, "bold")).pack()
-                    else:
-                        statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                      font=("Arial", 12, "bold")).pack()
+                if offline_number == 0:
+                    Label(root2, text="All servers status: Online", fg="green",
+                          font=("Arial", 12, "bold")).pack()
                 else:
-                    offline_number = offline_number + 1
-                    statu = Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
-                                  font=("Arial", 12, "bold")).pack()
+                    Label(root2, text=f"All servers status: {str(offline_number)} offline", fg="red",
+                          font=("Arial", 12, "bold")).pack()
 
         if "tcm" in online_list:
-            tcm = Label(root2, text="'tcm', identified as Text Chat status: Online", fg="green").pack()
+            Label(root2, text="'tcm', identified as TC status: Online", fg="green").pack()
         elif "tcm" in offline_list:
-            tcm = Label(root2, text="'tcm', identified as Text Chat status: Offline", fg="red").pack()
+            Label(root2, text="'tcm', identified as TC status: Offline", fg="red").pack()
         else:
-            tcm = Label(root2, text="'tcm', identified as Text Chat status: Unknown", fg="red").pack()
+            Label(root2, text="'tcm', identified as TC status: Unknown", fg="red").pack()
         if "vcm" in online_list:
-            vcm = Label(root2, text="'vcm', identified as Main VC status: Online", fg="green").pack()
+            Label(root2, text="'vcm', identified as VC status: Online", fg="green").pack()
         elif "vcm" in offline_list:
-            vcm = Label(root2, text="'vcm', identified as Main VC status: Offline", fg="red").pack()
+            Label(root2, text="'vcm', identified as VC status: Offline", fg="red").pack()
         else:
-            vcm = Label(root2, text="'vcm', identified as Main VC status: Unknown", fg="red").pack()
-        if "vcl" in online_list:
-            vcl = Label(root2, text="'tcm', identified as VC Log status: Online", fg="green").pack()
-        elif "vcl" in offline_list:
-            vcl = Label(root2, text="'tcm', identified as VC Log status: Offline", fg="red").pack()
-        else:
-            vcl = Label(root2, text="'tcm', identified as VC Log status: Unknown", fg="red").pack()
+            Label(root2, text="'vcm', identified as VC status: Unknown", fg="red").pack()
         root2.mainloop()
 
     refresh1()
-    Button(root, text="Refresh", command=refresh2).pack()
-    root.mainloop()
+    Button(root3, text="Refresh", command=refresh2).pack()
+    root3.mainloop()
 
 
 def script():
@@ -424,21 +346,7 @@ else:
         smtp_server.sendmail(sender_address, receiver_address, message)
     universal = Button(screen, text="Join Text Chat: Offline!", height=1, state=DISABLED).pack()
 if "vcm" in online_list:
-    if "vcl" in online_list:
-        vc = Button(screen, text="Join VC", height=1, command=voc).pack()
-    else:
-        import smtplib
-
-        sender_address = "jonahprogrambot@gmail.com"
-        receiver_address = "jonahjwalsh@gmail.com"
-        account_password = "skro7576"
-        subject = "VC log offline"
-        body = f"VC server log is offline!\nAutomated message from {user}"
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
-            smtp_server.login(sender_address, account_password)
-            message = f"Subject: {subject}\n\n{body}"
-            smtp_server.sendmail(sender_address, receiver_address, message)
-        vc = Button(screen, text="Join VC: Offline!", height=1, state=DISABLED).pack()
+    vc = Button(screen, text="Join VC", height=1, command=voc).pack()
 else:
     import smtplib
 
@@ -468,6 +376,6 @@ chat_transcript_area.bind('<KeyPress>', lambda e: 'break')
 chat_transcript_area.pack(side='left', padx=10)
 scrollbar.pack(side='right', fill='y')
 frame.pack(side='top')
-chat_transcript_area.insert('end', "now you can see if chats are offline yes very cool\nv1.1.7")
+chat_transcript_area.insert('end', "now you can see if chats are offline yes very cool\nWARNING: DO NOT JOIN VC WHEN SOMEONE IS IN TC\nv1.1.7")
 chat_transcript_area.yview(END)
 screen.mainloop()

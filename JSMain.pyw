@@ -210,13 +210,8 @@ class GUI:
                 message = user + " has joined"
                 self.chat_transcript_area.insert('end', message + '\n')
                 self.chat_transcript_area.yview(END)
-            elif "!" in message:
-                if "msg" in message:
-                    username, message = message.split(":")
-                    notneeded, isme, message = message.split()
-                    if isme == self.username:
-                        self.chat_transcript_area.insert('end', (self.username + " privately said: " + message) + '\n')
-                        self.chat_transcript_area.yview(END)
+            elif "@logserverusage@" in message:
+                pass
             else:
                 self.chat_transcript_area.insert('end', message + '\n')
                 self.chat_transcript_area.yview(END)

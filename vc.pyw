@@ -18,10 +18,10 @@ class Client:
         f.close()
         self.log_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         remote_ip = '50.113.72.248'
-        remote_port = 55888
+        remote_port = 25565
         self.log_socket.connect((remote_ip, remote_port))
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.log_socket.send((self.username + " has joined").encode('utf-8'))
+        self.log_socket.send(("@logserverusage@" + self.username + " has joined").encode('utf-8'))
         self.listen_for_incoming_messages_in_a_thread()
 
         while 1:
@@ -52,21 +52,24 @@ class Client:
         receive_thread.start()
         guithread = threading.Thread(target=self.gui)
         guithread.start()
-        logthread = threading.Thread(target=self.recive_log_data)
         self.send_data_to_server()
 
     def listen_for_incoming_messages_in_a_thread(self):
         thread = threading.Thread(target=self.recive_log_data, args=(self.log_socket,))
         thread.start()
 
-    def recive_log_data(self, so):
+    @staticmethod
+    def recive_log_data(so):
         while True:
             buffer = so.recv(256)
             if not buffer:
                 break
             message = buffer.decode('utf-8')
-            engine.say(message)
-            engine.runAndWait()
+            if "@logserverusage@" in message:
+                message = str(message)
+                message.replace("@logserverusage@", "")
+                engine.say(message)
+                engine.runAndWait()
 
         so.close()
 
@@ -78,7 +81,7 @@ class Client:
         def leave():
             import os
             root.destroy()
-            self.log_socket.send((self.username + " has left").encode('utf-8'))
+            self.log_socket.send(("@logserverusage@" + self.username + " has left").encode('utf-8'))
             os.system("TASKKILL /F /IM pythonw.exe")
             os.system("TASKKILL /F /IM pyw.exe")
             os.system("ServerSelect.pyw")
