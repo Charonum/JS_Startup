@@ -67,7 +67,7 @@ class Client:
             message = buffer.decode('utf-8')
             if "@logserverusage@" in message:
                 message = str(message)
-                message.replace("@logserverusage@", "")
+                message = message.replace("@logserverusage@", "")
                 engine.say(message)
                 engine.runAndWait()
 
