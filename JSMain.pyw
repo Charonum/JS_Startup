@@ -2,6 +2,7 @@ import socket
 import threading
 from tkinter import messagebox
 from tkinter import *
+from github import Github
 import os
 
 os.system("TASKKILL /F /IM cmd.exe")
@@ -49,11 +50,23 @@ def login():
 
         username_info = username.get()
         password_info = password.get()
+        g = Github("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")
+        user = g.get_user()
+        name = user.login
+        print(f"Connected to GitHub as {name}")
+
+        print("Connecting to 'Account Database'")
+        Account_Database = g.get_user().get_repo("AccountData")
+        contents = Account_Database.get_contents("")
+        for c in contents:
+            user_info = username_info + ".cacc"
+            if user_info == c:
+                Label(screen1, text="User Already Exists!", fg="red", font=("calibri", 11)).pack()
+                registered = True
 
         try:
-            file_check = open(username_info, "r")
-            Label(screen1, text="User Already Exists!", fg="red", font=("calibri", 11)).pack()
-            registered = True
+            if registered:
+                print("yes")
         except:
             registered = False
 
@@ -65,6 +78,10 @@ def login():
 
             username_entry.delete(0, END)
             password_entry.delete(0, END)
+            user_file = open(f"{username_info}.cacc", "r")
+            user_data = user_file.read()
+            Account_Database.create_file("test_user.cacc", f"{username_info} created an account", user_data)
+            os.remove(username_info + ".cacc")
 
             Label(screen1, text="Registration Sucess", fg="green", font=("calibri", 11)).pack()
 
