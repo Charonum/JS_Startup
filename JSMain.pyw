@@ -50,23 +50,18 @@ def login():
 
         username_info = username.get()
         password_info = password.get()
-        g = Github("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")
-        user = g.get_user()
-        name = user.login
-        print(f"Connected to GitHub as {name}")
-
-        print("Connecting to 'Account Database'")
+        g = Github("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")
         Account_Database = g.get_user().get_repo("AccountData")
         contents = Account_Database.get_contents("")
         for c in contents:
             user_info = username_info + ".cacc"
-            if user_info == c:
+            if user_info == c.name:
                 Label(screen1, text="User Already Exists!", fg="red", font=("calibri", 11)).pack()
                 registered = True
 
         try:
             if registered:
-                print("yes")
+                print("Skipping registration bool")
         except:
             registered = False
 
@@ -80,9 +75,8 @@ def login():
             password_entry.delete(0, END)
             user_file = open(f"{username_info}.cacc", "r")
             user_data = user_file.read()
-            Account_Database.create_file("test_user.cacc", f"{username_info} created an account", user_data)
-            os.remove(username_info + ".cacc")
-
+            Account_Database.create_file(f"{username_info}.cacc", f"{username_info} created an account", user_data)
+        if not registered:
             Label(screen1, text="Registration Sucess", fg="green", font=("calibri", 11)).pack()
 
     def login_verify():
@@ -92,23 +86,27 @@ def login():
         username_entry1.delete(0, END)
         password_entry1.delete(0, END)
         username1 = username1 + ".cacc"
-        list_of_files = os.listdir()
-        if username1 in list_of_files:
-            file1 = open(username1, "r")
-            verify = file1.read().splitlines()
-            if password1 in verify:
-                global username
-                username = username1
-                f = open("Logged.txt", "w")
-                f.write(username)
-                f.close()
-                screen.destroy()
-                os.system('ServerSelect.pyw')
-            else:
-                password_not_recognised()
+        g = Github("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")
+        Account_Database = g.get_user().get_repo("AccountData")
+        contents = Account_Database.get_contents("")
+        for c in contents:
+            user_info = username1
+            if user_info == c.name:
+                verify = str(c.decoded_content).replace("b", "")
+                verify = verify.replace("'", "")
+                if password1 in verify:
+                    global username
+                    username = username1
+                    f = open("Logged.txt", "w")
+                    f.write(username)
+                    f.close()
+                    screen.destroy()
+                    os.system('ServerSelect.pyw')
+                else:
+                    password_not_recognised()
 
-        else:
-            user_not_found()
+            else:
+                user_not_found()
 
     def register():
         global screen1
