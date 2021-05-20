@@ -50,7 +50,7 @@ def login():
 
         username_info = username.get()
         password_info = password.get()
-        g = Github("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")
+        g = Github("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")
         Account_Database = g.get_user().get_repo("AccountData")
         contents = Account_Database.get_contents("")
         for c in contents:
@@ -86,7 +86,7 @@ def login():
         username_entry1.delete(0, END)
         password_entry1.delete(0, END)
         username1 = username1 + ".cacc"
-        g = Github("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")
+        g = Github("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")
         Account_Database = g.get_user().get_repo("AccountData")
         contents = Account_Database.get_contents("")
         for c in contents:
