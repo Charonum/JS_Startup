@@ -2,6 +2,12 @@ from tkinter import *
 import os
 import socket
 import requests
+from github import Github
+import wget
+
+f = open("Logged.txt", "r")
+user = f.read()
+f.close()
 
 ip = requests.get('http://ip.42.pl/raw').text
 
@@ -33,6 +39,22 @@ else:
     Button(root, text="Uninstall", command=uninstall).pack()
     root.protocol("WM_DELETE_WINDOW", lambda: new_close())
     root.mainloop()
+
+tfk = open("Token.txt", "r")
+token_ = tfk.read()
+tfk.close()
+g = Github(token_)
+Account_Database = g.get_user().get_repo("AccountPfps")
+contents = Account_Database.get_contents("")
+for f in os.listdir("user_data"):
+    os.remove(fr"user_data\{f}")
+for content in contents:
+    content = content.name
+    print(content)
+    found_user = content
+    found_user = found_user.replace(".png", "")
+    os.mkdir(rf"user_data\{found_user}")
+    wget.download(f"https://github.com/Charonum/AccountPfps/raw/main/{content}", fr"user_data\{found_user}")
 
 
 def refresh():
@@ -324,9 +346,6 @@ screen = Tk()
 screen.geometry("610x390")
 screen.title("CharonChat")
 screen.iconbitmap('CC logo.ico')
-f = open("Logged.txt", "r")
-user = f.read()
-f.close()
 user = user.replace(".cacc", "")
 Label(text=f"Welcome, {user}", bg="grey", width="500", height="2", font=("Calibri", 13)).pack()
 Label(text="").pack()
@@ -376,6 +395,7 @@ chat_transcript_area.bind('<KeyPress>', lambda e: 'break')
 chat_transcript_area.pack(side='left', padx=10)
 scrollbar.pack(side='right', fill='y')
 frame.pack(side='top')
-chat_transcript_area.insert('end', "now you can see if chats are offline yes very cool\nWARNING: DO NOT JOIN VC WHEN SOMEONE IS IN TC\nv1.1.7")
+chat_transcript_area.insert('end',
+                            "now you can see if chats are offline yes very cool\nWARNING: DO NOT JOIN VC WHEN SOMEONE IS IN TC\nv1.1.7")
 chat_transcript_area.yview(END)
 screen.mainloop()
