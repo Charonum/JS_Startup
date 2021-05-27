@@ -78,7 +78,7 @@ def start():
         quit()
     else:
         import os
-        os.system("setup.py")
+        pass
 
 
 start()

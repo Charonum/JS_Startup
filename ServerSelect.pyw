@@ -3,7 +3,9 @@ import os
 import socket
 import requests
 from github import Github
-import wget
+import getpass
+from datetime import date
+from tkinter.filedialog import askopenfile
 
 f = open("Logged.txt", "r")
 user = f.read()
@@ -46,15 +48,25 @@ tfk.close()
 g = Github(token_)
 Account_Database = g.get_user().get_repo("AccountPfps")
 contents = Account_Database.get_contents("")
-for f in os.listdir("user_data"):
-    os.remove(fr"user_data\{f}")
 for content in contents:
+    rn = date.today().strftime("%d/%m/%Y")
     content = content.name
-    print(content)
     found_user = content
     found_user = found_user.replace(".png", "")
-    os.mkdir(rf"user_data\{found_user}")
-    wget.download(f"https://github.com/Charonum/AccountPfps/raw/main/{content}", fr"user_data\{found_user}")
+    found_user = found_user.replace(".txt", "")
+    try:
+        os.mkdir(rf"user_data\{found_user}")
+    except:
+        for r in os.listdir(fr"user_data\{found_user}"):
+            if rn.replace("/", "!") in r:
+                pass
+            else:
+                os.remove(fr"user_data\{found_user}\{r}")
+                file_exteded = content.split(".")[1]
+                file = content.split(".")[0]
+                wanted = file + rn + "." + file_exteded
+                wanted = wanted.replace("/", "!")
+                os.system(rf"C:\Users\{getpass.getuser()}\AppData\Local\Programs\Python\Python39\Lib\site-packages\wget.py https://github.com/Charonum/AccountPfps/raw/main/{content} -ouser_data\{found_user}\{wanted}")
 
 
 def refresh():
@@ -140,6 +152,44 @@ def report():
         smtp_server_.sendmail(sender_address_, receiver_address_, messages)
 
 
+def search_user():
+    root = Tk()
+
+    def update(data):
+        list_.delete(0, END)
+        for item in data:
+            list_.insert(END, item)
+
+    def fillout(e):
+        entry.delete(0, END)
+        entry.insert(0, list_.get(ANCHOR))
+
+    def check(e):
+        typed = entry.get()
+        if typed == '':
+            data = users
+        else:
+            data = []
+            for item in users:
+                if typed.lower() in item.lower():
+                    data.append(item)
+        update(data)
+
+    root.title("CharonChat")
+    root.iconbitmap("CC logo.ico")
+    root.geometry("500x300")
+    Label(root, text="Start Typing...", font=("Helvetica", 14), foreground="grey").pack(pady=20)
+    entry = Entry(root, font=("Helvetica", 20))
+    entry.pack()
+    list_ = Listbox(root, width=50)
+    list_.pack(pady=40)
+    users = os.listdir("user_data")
+    update(users)
+    list_.bind("<<ListboxSelect>>", fillout)
+    entry.bind("<KeyRelease>", check)
+    root.mainloop()
+
+
 def voc():
     screen.destroy()
     os.system("vc.pyw")
@@ -164,6 +214,26 @@ def settingsf():
                   fg="green").pack()
             newname.delete(0, END)
 
+    def open_file():
+        def add():
+            tfk = open("Token.txt", "r")
+            token_ = tfk.read()
+            tfk.close()
+            g = Github(token_)
+            Account_Database = g.get_user().get_repo("AccountPfps")
+            contents = Account_Database.get_contents("")
+            try:
+                u = Account_Database.get_contents(f"{user}.png")
+                Account_Database.delete_file(f"{user}.png", "u", u.sha)
+                Account_Database.create_file(f"{user}.png", "active", content)
+            except:
+                Account_Database.create_file(f"{user}.png", "active", content)
+            Label(root5, text=f"Profile Picture Uploaded!\nThis will become public in 24 hours.", foreground="green").pack()
+
+        file = askopenfile(mode='rb', filetypes=[('PNG Image Files', '*.png')])
+        content = file.read()
+        add()
+
     root5 = Tk()
     root5.title("Settings")
     root5.iconbitmap("CC logo.ico")
@@ -176,7 +246,7 @@ def settingsf():
     errorw = Label(root5, text="")
     errorw.pack(anchor="w")
     Label(root5, text="").pack(anchor="w")
-    Label(root5, text="").pack(anchor="w")
+    Button(root5, text="Change Profile Picture", command=lambda: open_file()).pack()
     Label(root5, text="").pack(anchor="w")
     Label(root5, text="").pack(anchor="w")
     Button(root5, text="Save", command=save).pack()
@@ -343,7 +413,7 @@ def script():
 
 
 screen = Tk()
-screen.geometry("610x390")
+screen.geometry("610x420")
 screen.title("CharonChat")
 screen.iconbitmap('CC logo.ico')
 user = user.replace(".cacc", "")
@@ -383,6 +453,7 @@ chat = Button(screen, text="Report A Bug", height=1, command=guireport).pack()
 settings = Button(screen, text="Settings", height=1, command=settingsf).pack()
 alex = Button(screen, text="Chat With A.L.E.X.", height=1, command=alex).pack()
 charump = Button(screen, text="Chat With Charump", height=1, command=char).pack()
+Button(screen, text="Search For Users", height=1, command=lambda: search_user()).pack()
 script2 = Button(screen, text="Scripts", height=1, command=lambda: script()).pack()
 online_servers = Button(screen, text="Servers Status", height=1, command=status).pack()
 logout = Button(screen, text="Log Out", height=1, command=logout).pack()
