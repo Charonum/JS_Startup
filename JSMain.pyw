@@ -1,9 +1,16 @@
+import getpass
+import shutil
 import socket
 import threading
 from tkinter import messagebox
 from tkinter import *
+from tkinter.filedialog import askopenfile
+
+import github
+import wget
 from github import Github
 import os
+from HyperlinkManager import HyperlinkManager
 
 os.system("TASKKILL /F /IM cmd.exe")
 
@@ -221,18 +228,45 @@ class GUI:
         thread.start()
 
     def receive_message_from_server(self, so):
+        def hello():
+            def run():
+                os.chdir("files_current")
+                os.startfile(filename)
+
+            def download():
+                try:
+                    shutil.move(fr"files_current\{filename}", fr"C:\Users\{getpass.getuser()}\Desktop")
+                    Label(root, text="The file is on your desktop", foreground="green").pack()
+                except shutil.Error:
+                    Label(root, text="The file is already on your desktop", foreground="red").pack()
+            root = Tk()
+            root.title(filename)
+            root.geometry("250x300")
+            Button(root, text="Run (Download and then run)", command=lambda: run(), state=DISABLED).pack()
+            Button(root, text="Download", command=lambda: download()).pack()
+            root.mainloop()
         while True:
             buffer = so.recv(256)
             if not buffer:
                 break
             message = buffer.decode('utf-8')
-            if "joined" in message:
-                user = message.split(":")[1]
-                message = user + " has joined"
-                self.chat_transcript_area.insert('end', message + '\n')
-                self.chat_transcript_area.yview(END)
-            elif "@logserverusage@" in message:
+            if "@logserverusage@" in message:
                 pass
+            elif "<f:" in message:
+                hyperlink = HyperlinkManager(self.chat_transcript_area)
+                filename = str(message).replace("<f:", "")
+                print(message)
+                try:
+                    un, un2, filename = str(message).split(":")
+                    print(filename)
+                    wget.download(f"https://raw.githubusercontent.com/Charonum/PendFChat/main/{filename}",
+                                fr"files_current\{filename}")
+                    self.chat_transcript_area.insert(END, f'{un}: ')
+                    self.chat_transcript_area.insert(END, filename, hyperlink.add(hello))
+                    self.chat_transcript_area.insert(END, '\n')
+                    self.chat_transcript_area.yview(END)
+                except:
+                    pass
             else:
                 self.chat_transcript_area.insert('end', message + '\n')
                 self.chat_transcript_area.yview(END)
@@ -253,13 +287,55 @@ class GUI:
     def display_chat_entry_box(self):
         frame = Frame()
         Label(frame, text='Enter message:', font=("Serif", 12)).pack(side='top', anchor='w')
-        self.enter_text_widget = Text(frame, width=60, height=3, font=("Serif", 12))
+        self.enter_text_widget = Text(frame, width=65, height=3, font=("Serif", 12))
         self.enter_text_widget.pack(side='left', pady=15)
         self.enter_text_widget.bind('<Return>', self.on_enter_key_pressed)
-        frame.pack(side='top')
+        frame.pack(side='top', anchor=W)
+        Button(self.root, text="Send File", command=lambda: self.send()).pack()
+
+    def send(self):
+        file = askopenfile(mode='rb')
+        backslash_int = 0
+        for backslash in file.name.split("/"):
+            backslash_int = backslash_int + 1
+        backslash_int = backslash_int - 1
+        filename = file.name.split("/")[backslash_int]
+        tfk = open("Token.txt", "r")
+        token_ = tfk.read()
+        tfk.close()
+        g = Github(token_)
+        Account_Database = g.get_user().get_repo("PendFChat")
+        Account_Database.create_file(filename, "Added chat pending file", file.read())
+        def hello():
+            def run():
+                os.chdir("files_current")
+                os.startfile(filename)
+
+            def download():
+                try:
+                    shutil.move(fr"files_current\{filename}", fr"C:\Users\{getpass.getuser()}\Desktop")
+                    Label(root, text="The file is on your desktop", foreground="green").pack()
+                except shutil.Error:
+                    Label(root, text="The file is already on your desktop", foreground="red").pack()
+
+            root = Tk()
+            root.title(filename)
+            root.geometry("250x300")
+            Button(root, text="Run (Download and then run)", command=lambda: run(), state=DISABLED).pack()
+            Button(root, text="Download", command=lambda: download()).pack()
+            root.mainloop()
+        hyperlink = HyperlinkManager(self.chat_transcript_area)
+        print(filename)
+        wget.download(f"https://raw.githubusercontent.com/Charonum/PendFChat/main/{filename}",
+                        fr"files_current\{filename}")
+        self.chat_transcript_area.insert(END, f'{self.username}: ')
+        self.chat_transcript_area.insert(END, filename, hyperlink.add(hello))
+        self.chat_transcript_area.insert(END, '\n')
+        self.chat_transcript_area.yview(END)
+        self.client_socket.send(f"{self.username}: <f:{filename}".encode("utf-8"))
 
     def on_join(self):
-        self.client_socket.send(("joined:" + self.username).encode('utf-8'))
+        self.client_socket.send((self.username + " has joined").encode('utf-8'))
 
     def on_enter_key_pressed(self, event):
         self.send_chat()
@@ -284,6 +360,8 @@ class GUI:
             self.client_socket.send((self.username + " has left").encode("utf-8"))
             self.root.destroy()
             self.client_socket.close()
+            for file in os.listdir("files_current"):
+                os.remove(fr"files_current\{file}")
             os.system("ServerSelect.pyw")
             exit(0)
 

@@ -18,8 +18,8 @@ class GUI:
         self.initialize_gui()
 
     def initialize_gui(self):
-        self.root.title("JS")
-        self.root.iconbitmap("JS logo.ico")
+        self.root.title("CharonChat")
+        self.root.iconbitmap("CC logo.ico")
         self.root.resizable(0, 0)
         self.display_chat_box()
         self.display_chat_entry_box()
